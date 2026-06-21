@@ -67,7 +67,6 @@ export default function Home() {
     window.print();
   };
 
-  // ✨ 自社製品（PAL）判定ロジック（株式会社PALの完全一致のみ）
   const checkIsPalProduct = (maker: string) => {
     if (!maker) return false;
     return maker.trim() === "株式会社PAL";
@@ -77,7 +76,6 @@ export default function Home() {
   const pinnedItems = data.filter((item) => pinnedIds.includes(item.id));
   const pinnedCategories = Array.from(new Set(pinnedItems.map((item) => item.category)));
 
-  // 🔍 フィルタリング処理
   const filteredData = data.filter((item) => {
     if (item.category !== activeCategory) return false;
     if (!searchQuery) return true;
@@ -92,7 +90,6 @@ export default function Home() {
     );
   });
 
-  // 🏆 株式会社PALの製品を強制的に「最上部」へ移動させるソート処理
   const sortedFilteredData = [...filteredData].sort((a, b) => {
     const isAPal = checkIsPalProduct(a.maker);
     const isBPal = checkIsPalProduct(b.maker);
@@ -123,7 +120,6 @@ export default function Home() {
           .page-break { page-break-inside: avoid; page-break-after: auto; }
           .proposal-card { border: 1px solid #cbd5e1 !important; border-left: 4px solid #1e3a8a !important; page-break-inside: avoid; }
         }
-        /* サイバー風スキャンアニメーション */
         @keyframes scan {
           0% { transform: translateX(-100%); }
           100% { transform: translateX(200%); }
@@ -161,21 +157,17 @@ export default function Home() {
 
       <div className="no-print p-6 max-w-[1400px] mx-auto">
         {loading ? (
-          /* ✨ 美しくワクワクするサイバー風ローディング画面 */
           <div className="flex flex-col items-center justify-center py-32 px-4">
             <div className="relative flex justify-center items-center w-36 h-36 mb-8">
-              {/* 回転する未来的なリング群 */}
               <div className="absolute inset-0 rounded-full border-t-2 border-blue-500 opacity-80 animate-[spin_3s_linear_infinite]"></div>
               <div className="absolute inset-2 rounded-full border-r-2 border-cyan-400 opacity-60 animate-[spin_2s_linear_infinite_reverse]"></div>
               <div className="absolute inset-4 rounded-full border-b-2 border-indigo-500 opacity-70 animate-[spin_4s_linear_infinite]"></div>
               
-              {/* 中央のPALロゴ */}
               <div className="bg-slate-900 rounded-full w-20 h-20 flex items-center justify-center z-10 shadow-[0_0_20px_rgba(59,130,246,0.4)]">
                 <img src="/pal-logo.png" alt="PAL Logo" className="h-8 w-auto object-contain animate-pulse" onError={(e) => e.currentTarget.style.display = 'none'} />
               </div>
             </div>
             
-            {/* テキストとスキャンバー */}
             <div className="text-center space-y-4">
               <h3 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 tracking-[0.3em] animate-pulse">
                 SYSTEM INITIALIZING
@@ -278,22 +270,26 @@ export default function Home() {
                               </div>
                               <h3 className="text-base font-bold text-white leading-tight">{item.name}</h3>
                             </div>
+                            
+                            {/* ✨ 修正1: 「参考価格」のラベルを追加して分かりやすく */}
                             <div className="text-right shrink-0">
-                              <span className="text-sm font-bold text-blue-400 block">{item.price || "オープン"}</span>
+                              <span className="text-[10px] font-bold text-slate-500 block mb-0.5">参考価格</span>
+                              <span className="text-sm font-bold text-blue-400 block">{item.price || "要問合せ"}</span>
                             </div>
                           </div>
                         </div>
 
+                        {/* ✨ 修正2: line-clamp-4 を削除し、テキストが最後まで読めるように調整 */}
                         <div className="grid grid-cols-2 gap-3 mb-4 flex-1">
-                          <div className="bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50">
+                          <div className="bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 h-full">
                             <span className="text-[10px] font-bold text-slate-500 block mb-1">■ 目的・用途</span>
-                            <p className="text-xs text-slate-300 line-clamp-4 whitespace-pre-line">
+                            <p className="text-xs text-slate-300 whitespace-pre-line leading-relaxed">
                               {String(item.usage || "─").replace(/➔/g, '\n➔')}
                             </p>
                           </div>
-                          <div className="bg-slate-900/50 p-2.5 rounded-lg border border-slate-700/50">
+                          <div className="bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 h-full">
                             <span className="text-[10px] font-bold text-emerald-600 block mb-1">■ 数値効果・特徴</span>
-                            <p className="text-xs text-slate-300 line-clamp-4 whitespace-pre-line">
+                            <p className="text-xs text-slate-300 whitespace-pre-line leading-relaxed">
                               {String(item.effect || "─").replace(/➔/g, '\n➔')}
                             </p>
                           </div>
