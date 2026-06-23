@@ -140,7 +140,7 @@ export default function Home() {
             <img src="/pal-logo.png" alt="PAL Logo" className="h-12 w-auto object-contain bg-white/10 rounded p-1" onError={(e) => e.currentTarget.style.display = 'none'} />
             <div>
               <p className="text-xs font-bold text-slate-400">株式会社PAL | 物流ソリューションディビジョン</p>
-              <h1 className="text-xl md:text-2xl font-black text-white tracking-wide">マテハン機器選定・自動化提案システム</h1>
+              <h1 className="text-xl md:text-2xl font-black text-white tracking-wide">マテハン機器選定・自動化提案アプリ</h1>
             </div>
           </div>
           
