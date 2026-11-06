@@ -29,8 +29,9 @@ export default function Home() {
           Object.keys(json.catalog).forEach((categoryName) => {
             const items = json.catalog[categoryName];
             if (Array.isArray(items)) {
-              items.forEach((item) => {
-                allItems.push({ ...item, category: categoryName });
+              items.forEach((item, index) => {
+                // スプレッドシート上の追加順（インデックス）を保持
+                allItems.push({ ...item, category: categoryName, originalIndex: index });
               });
             }
           });
@@ -93,12 +94,15 @@ export default function Home() {
     );
   });
 
+  // ★ PAL自社製品を最優先し、それ以外は「最新取得（シート末尾のデータ＝降順）」でソート
   const sortedFilteredData = [...filteredData].sort((a, b) => {
     const isAPal = checkIsPalProduct(a.maker);
     const isBPal = checkIsPalProduct(b.maker);
     if (isAPal && !isBPal) return -1;
     if (!isAPal && isBPal) return 1;
-    return 0;
+
+    // 最新（シート下部）のものが上に来るように降順ソート
+    return (b.originalIndex ?? 0) - (a.originalIndex ?? 0);
   });
 
   const isAllPinned = sortedFilteredData.length > 0 && sortedFilteredData.every((item) => pinnedIds.includes(item.id));
@@ -368,7 +372,8 @@ export default function Home() {
                     const isBPal = checkIsPalProduct(b.maker);
                     if (isAPal && !isBPal) return -1;
                     if (!isAPal && isBPal) return 1;
-                    return 0;
+                    // PDF側も同様に新しい順で表示
+                    return (b.originalIndex ?? 0) - (a.originalIndex ?? 0);
                   });
 
                 return (
@@ -411,7 +416,7 @@ export default function Home() {
                               </div>
                             </div>
 
-                            {/* カード下部：詳細エリア（絶対崩れない強固なFlex2カラム構造） */}
+                            {/* カード下部：詳細エリア */}
                             <div className="flex flex-row divide-x divide-slate-300">
                               
                               {/* 左側：用途 */}

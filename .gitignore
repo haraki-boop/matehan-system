@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 秘密鍵・Pythonスクリプト
+hunter_secret.json
+hunter.py
+*.bat
